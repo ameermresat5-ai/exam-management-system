@@ -1,0 +1,168 @@
+.app-shell {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 64px;
+  padding: 0 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e1e6ef;
+}
+
+.brand {
+  color: #172033;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.nav-links,
+.nav-user,
+.inline-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.nav-links a,
+.nav-user a,
+.inline-actions a,
+.auth-switch a,
+.item-card a {
+  color: #2557a7;
+  font-weight: 600;
+}
+
+.nav-links a.active {
+  color: #172033;
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #2557a7;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.main-content {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #f5f7fb;
+}
+
+.auth-card,
+.page-panel {
+  background: #ffffff;
+  border: 1px solid #e1e6ef;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(26, 38, 62, 0.08);
+}
+
+.auth-card {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+}
+
+.page-panel {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+}
+
+.page-panel.narrow {
+  max-width: 680px;
+}
+
+.page-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.stacked-form,
+.list-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.quick-grid a,
+.item-card,
+.button-link {
+  border: 1px solid #e1e6ef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.quick-grid a,
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  color: #2557a7;
+  font-weight: 700;
+}
+
+.item-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+}
+
+.form-error {
+  padding: 12px 14px;
+  border: 1px solid #f0b8b8;
+  border-radius: 8px;
+  background: #fff3f3;
+  color: #9c1c1c;
+}
+
+.page-state {
+  padding: 32px;
+  color: #5c667a;
+}
+
+@media (max-width: 760px) {
+  .navbar,
+  .nav-links,
+  .nav-user,
+  .page-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .navbar {
+    padding: 18px;
+  }
+
+  .main-content {
+    padding: 18px 0;
+  }
+}
