@@ -10,6 +10,7 @@ import StudentDashboard from './pages/student/StudentDashboard'
 import StudentExams from './pages/student/StudentExams'
 import StudentResult from './pages/student/StudentResult'
 import StudentSubmissions from './pages/student/StudentSubmissions'
+import StudentTakeExam from './pages/student/StudentTakeExam'
 import LecturerDashboard from './pages/lecturer/LecturerDashboard'
 import LecturerExams from './pages/lecturer/LecturerExams'
 import CreateExam from './pages/lecturer/CreateExam'
@@ -30,6 +31,7 @@ function App() {
         <Route element={<ProtectedRoute roles={["STUDENT"]} />}>
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/exams" element={<StudentExams />} />
+          <Route path="/student/exams/:id/take" element={<StudentTakeExam />} />
           <Route path="/student/submissions" element={<StudentSubmissions />} />
           <Route path="/student/results/:submissionId" element={<StudentResult />} />
         </Route>

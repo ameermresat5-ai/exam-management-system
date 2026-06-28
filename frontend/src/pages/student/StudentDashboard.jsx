@@ -6,11 +6,14 @@ function StudentDashboard() {
 
   return (
     <section className="page-panel">
-      <h1>Student Dashboard</h1>
-      <p>Welcome, {user?.fullName || user?.email}.</p>
+      <div>
+        <h1>Student Dashboard</h1>
+        <p>Welcome, {user?.fullName || user?.email}. Start exams and review your submissions.</p>
+      </div>
+
       <div className="quick-grid">
-        <Link to="/student/exams">Available exams</Link>
-        <Link to="/student/submissions">My submissions</Link>
+        <Link to="/student/exams">Available Exams</Link>
+        <Link to="/student/submissions">My Submissions</Link>
       </div>
     </section>
   )
