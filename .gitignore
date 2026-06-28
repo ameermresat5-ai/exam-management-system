@@ -3,15 +3,15 @@ node_modules/
 npm-debug.log*
 .env
 
-# Backend / Frontend build
+# Build
 dist/
 build/
 coverage/
 
-# OS / Editor
-.DS_Store
+# Editor
 .vscode/
 .idea/
+.DS_Store
 
 # Terraform
 terraform.tfvars
