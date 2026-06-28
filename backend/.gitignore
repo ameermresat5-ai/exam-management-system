@@ -1,0 +1,29 @@
+# Node
+node_modules/
+npm-debug.log*
+.env
+
+# Backend / Frontend build
+dist/
+build/
+coverage/
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+
+# Terraform
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+# Kubernetes / secrets
+kubeconfig*
+*.key
+*.pem
+
+# Logs
+logs/
+*.log
