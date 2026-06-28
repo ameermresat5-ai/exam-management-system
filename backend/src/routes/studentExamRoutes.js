@@ -10,19 +10,27 @@ const submissionRoutes = express.Router();
 const studentOnly = [authMiddleware, roleMiddleware("STUDENT")];
 
 studentRoutes.use(studentOnly);
-submissionRoutes.use(studentOnly);
 
 studentRoutes.get("/exams/available", studentExamController.getAvailableExams);
 studentRoutes.post("/exams/:examId/start", studentExamController.startExam);
 studentRoutes.get("/exams/:examId", studentExamController.getExamDetails);
 
-submissionRoutes.get("/my", studentExamController.getMySubmissions);
+submissionRoutes.get("/my", studentOnly, studentExamController.getMySubmissions);
 submissionRoutes.patch(
   "/:submissionId/auto-save",
+  studentOnly,
   studentExamController.autoSaveAnswers
 );
-submissionRoutes.post("/:submissionId/submit", studentExamController.submitExam);
-submissionRoutes.get("/:id/result", studentExamController.getSubmissionResult);
+submissionRoutes.post(
+  "/:submissionId/submit",
+  studentOnly,
+  studentExamController.submitExam
+);
+submissionRoutes.get(
+  "/:id/result",
+  studentOnly,
+  studentExamController.getSubmissionResult
+);
 
 module.exports = {
   studentRoutes,
