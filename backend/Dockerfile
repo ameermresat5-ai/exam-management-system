@@ -4,10 +4,11 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json ./
+COPY backend/package.json backend/package-lock.json ./
 RUN npm ci --omit=dev
 
-COPY src ./src
+COPY backend/src ./src
+COPY database /database
 
 EXPOSE 5000
 
