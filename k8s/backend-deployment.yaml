@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: exam-backend:k8s-v2
+          image: exam-backend:k8s-v3
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
