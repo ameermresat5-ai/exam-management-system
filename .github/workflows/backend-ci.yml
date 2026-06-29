@@ -1,0 +1,47 @@
+name: Backend CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run available backend checks
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          has_script() {
+            node -e "const scripts = require('./package.json').scripts || {}; process.exit(scripts[process.argv[1]] ? 0 : 1)" "$1"
+          }
+
+          if has_script test; then
+            npm test
+          elif has_script lint; then
+            npm run lint
+          elif has_script build; then
+            npm run build
+          else
+            echo "No backend test, lint, or build script found. Skipping optional checks."
+          fi
