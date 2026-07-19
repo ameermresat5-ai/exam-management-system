@@ -386,3 +386,9 @@ The final diagram should have:
 - Visible arrows.
 - Clearly separated system layers.
 - No overlapping elements.
+
+### Rendered Architecture Diagram
+
+The following diagram presents the complete architecture and communication between the client, server, business services, database, monitoring, and deployment layers.
+
+![General System Architecture](diagrams/system-architecture.png)

@@ -1,0 +1,92 @@
+flowchart TB
+    USERS["Users<br/>Student / Lecturer / Administrator"]
+
+    subgraph CLIENT["Client Layer"]
+        BROWSER["Web Browser"]
+        REACT["React + Vite Frontend"]
+        ROUTER["React Router"]
+        AUTH_CONTEXT["Authentication Context"]
+        AXIOS["Axios API Client"]
+        LOCAL_STORAGE[("Browser localStorage")]
+    end
+
+    subgraph SERVER["Server Layer"]
+        EXPRESS["Node.js + Express REST API"]
+        SECURITY["Helmet / CORS / Rate Limiting / Morgan"]
+        ROUTES["Express Routes"]
+        AUTH["JWT Authentication Middleware"]
+        ROLES["Role Authorization Middleware"]
+        CONTROLLERS["Controllers"]
+        VALIDATORS["Joi Validators"]
+    end
+
+    subgraph SERVICES["Business Services Layer"]
+        AUTH_SERVICE["Authentication Service"]
+        EXAM_SERVICE["Exam Service"]
+        QUESTION_SERVICE["Question Service"]
+        STUDENT_SERVICE["Student Exam Service"]
+        GRADING_SERVICE["Grading Service"]
+    end
+
+    subgraph DATABASE["Database Layer"]
+        PG_CLIENT["Node.js pg Client"]
+        POSTGRES[("PostgreSQL Database")]
+    end
+
+    subgraph MONITORING["Monitoring Layer"]
+        HEALTH["Health and Readiness Endpoints"]
+        METRICS["Prometheus Metrics Endpoint"]
+        PROMETHEUS["Prometheus"]
+        GRAFANA["Grafana"]
+    end
+
+    subgraph DEVOPS["DevOps and Deployment Layer"]
+        GITHUB["GitHub Repository"]
+        ACTIONS["GitHub Actions"]
+        DOCKER["Docker Images"]
+        KUBERNETES["Kubernetes / GKE"]
+        TERRAFORM["Terraform"]
+    end
+
+    USERS --> BROWSER
+    BROWSER --> REACT
+
+    REACT --> ROUTER
+    REACT --> AUTH_CONTEXT
+    AUTH_CONTEXT <--> LOCAL_STORAGE
+    REACT --> AXIOS
+
+    AXIOS -->|"HTTP + JSON + JWT"| EXPRESS
+    EXPRESS --> SECURITY
+    SECURITY --> ROUTES
+    ROUTES --> AUTH
+    AUTH --> ROLES
+    ROLES --> CONTROLLERS
+    CONTROLLERS --> VALIDATORS
+
+    CONTROLLERS --> AUTH_SERVICE
+    CONTROLLERS --> EXAM_SERVICE
+    CONTROLLERS --> QUESTION_SERVICE
+    CONTROLLERS --> STUDENT_SERVICE
+    CONTROLLERS --> GRADING_SERVICE
+
+    AUTH_SERVICE --> PG_CLIENT
+    EXAM_SERVICE --> PG_CLIENT
+    QUESTION_SERVICE --> PG_CLIENT
+    STUDENT_SERVICE --> PG_CLIENT
+    GRADING_SERVICE --> PG_CLIENT
+
+    PG_CLIENT --> POSTGRES
+
+    EXPRESS --> HEALTH
+    EXPRESS --> METRICS
+    PROMETHEUS -->|"Scrapes /metrics"| METRICS
+    GRAFANA --> PROMETHEUS
+
+    GITHUB --> ACTIONS
+    ACTIONS --> DOCKER
+    DOCKER --> KUBERNETES
+    TERRAFORM --> KUBERNETES
+
+    KUBERNETES --> CLIENT
+    KUBERNETES --> SERVER
