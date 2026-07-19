@@ -1,0 +1,67 @@
+%% Deployment Diagram
+flowchart TB
+    DEVELOPERS["Developers<br/>Ameer Mresat and Mohamed Kharanba"]
+    USERS["Students / Lecturers / Administrators"]
+
+    subgraph SOURCE_CONTROL["GitHub"]
+        REPOSITORY["GitHub Repository"]
+        ACTIONS["GitHub Actions"]
+    end
+
+    subgraph REGISTRY["Google Artifact Registry - Planned"]
+        FRONTEND_IMAGE["Frontend Docker Image"]
+        BACKEND_IMAGE["Backend Docker Image"]
+    end
+
+    subgraph GOOGLE_CLOUD["Google Cloud - Planned Production"]
+        TERRAFORM["Terraform Infrastructure"]
+
+        subgraph GKE["Google Kubernetes Engine"]
+            LOAD_BALANCER["Ingress / Load Balancer"]
+
+            subgraph FRONTEND_WORKLOAD["Frontend Workload"]
+                FRONTEND_SERVICE["Frontend Service"]
+                FRONTEND_POD["Frontend Pod<br/>Nginx + React"]
+            end
+
+            subgraph BACKEND_WORKLOAD["Backend Workload"]
+                BACKEND_SERVICE["Backend Service"]
+                BACKEND_POD["Backend Pod<br/>Node.js + Express"]
+                CONFIGMAP["Backend ConfigMap"]
+                K8S_SECRET["Kubernetes Secrets"]
+            end
+
+            subgraph OBSERVABILITY["Monitoring"]
+                PROMETHEUS["Prometheus"]
+                GRAFANA["Grafana"]
+            end
+        end
+
+        CLOUD_SQL[("Managed PostgreSQL / Cloud SQL")]
+    end
+
+    DEVELOPERS --> REPOSITORY
+    REPOSITORY --> ACTIONS
+
+    ACTIONS --> FRONTEND_IMAGE
+    ACTIONS --> BACKEND_IMAGE
+
+    TERRAFORM --> GKE
+    TERRAFORM --> CLOUD_SQL
+
+    FRONTEND_IMAGE --> FRONTEND_POD
+    BACKEND_IMAGE --> BACKEND_POD
+
+    USERS --> LOAD_BALANCER
+    LOAD_BALANCER --> FRONTEND_SERVICE
+    FRONTEND_SERVICE --> FRONTEND_POD
+
+    FRONTEND_POD -->|"HTTP + JSON + JWT"| BACKEND_SERVICE
+    BACKEND_SERVICE --> BACKEND_POD
+
+    CONFIGMAP --> BACKEND_POD
+    K8S_SECRET --> BACKEND_POD
+
+    BACKEND_POD -->|"SQL"| CLOUD_SQL
+    PROMETHEUS -->|"Scrapes /metrics"| BACKEND_SERVICE
+    GRAFANA --> PROMETHEUS

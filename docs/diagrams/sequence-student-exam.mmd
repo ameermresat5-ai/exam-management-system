@@ -1,0 +1,58 @@
+%% Student Takes and Submits an Exam
+sequenceDiagram
+    autonumber
+
+    actor Student
+    participant UI as React Frontend
+    participant API as Express API
+    participant Auth as Student Authorization
+    participant Service as Student Exam Service
+    participant DB as PostgreSQL
+
+    Student->>UI: Open available exams page
+    UI->>API: GET /api/student/exams/available + JWT
+    API->>Auth: Verify JWT and STUDENT role
+    Auth-->>API: Authorized request
+    API->>Service: getAvailableExams(studentId)
+    Service->>DB: SELECT published available exams
+    DB-->>Service: Available exams
+    Service-->>UI: Exams JSON
+    UI-->>Student: Display available exams
+
+    Student->>UI: Select Start Exam
+    UI->>API: POST /api/student/exams/:examId/start
+    API->>Auth: Verify student
+    API->>Service: startExam(examId, studentId)
+    Service->>DB: Validate exam availability
+    Service->>DB: INSERT exam session
+    Service->>DB: INSERT IN_PROGRESS submission
+    DB-->>Service: Session and submission
+    Service-->>UI: Start-exam response
+
+    UI->>API: GET /api/student/exams/:examId
+    API->>Service: getStudentSafeExam(examId)
+    Service->>DB: SELECT exam questions and options
+    DB-->>Service: Exam data
+    Service->>Service: Remove correct answers
+    Service-->>UI: Student-safe exam JSON
+    UI-->>Student: Display exam questions
+
+    loop During the exam
+        Student->>UI: Enter or change answer
+        UI->>API: PATCH /api/submissions/:id/auto-save
+        API->>Auth: Verify student ownership
+        API->>Service: autoSaveAnswers(submissionId, answers)
+        Service->>DB: INSERT or UPDATE answers
+        DB-->>Service: Answers saved
+        Service-->>UI: Auto-save success
+    end
+
+    Student->>UI: Select Submit Exam
+    UI->>API: POST /api/submissions/:id/submit
+    API->>Auth: Verify student ownership
+    API->>Service: submitExam(submissionId)
+    Service->>DB: UPDATE status to SUBMITTED
+    Service->>DB: UPDATE session end time
+    DB-->>Service: Submitted record
+    Service-->>UI: Submission success
+    UI-->>Student: Display submission confirmation

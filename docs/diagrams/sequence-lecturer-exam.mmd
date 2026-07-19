@@ -1,0 +1,50 @@
+%% Lecturer Creates and Publishes an Exam
+sequenceDiagram
+    autonumber
+
+    actor Lecturer
+    participant UI as React Frontend
+    participant API as Express API
+    participant Auth as Auth and Role Middleware
+    participant Controller as Exam Controller
+    participant Service as Exam Service
+    participant QuestionService as Question Service
+    participant DB as PostgreSQL
+
+    Lecturer->>UI: Complete create-exam form
+    UI->>API: POST /api/exams + JWT
+    API->>Auth: Verify JWT
+    Auth->>Auth: Check LECTURER or ADMIN role
+    Auth-->>API: Authorized request
+
+    API->>Controller: createExam(request)
+    Controller->>Controller: Validate exam data
+    Controller->>Service: createExam(payload, userId)
+    Service->>DB: INSERT exam
+    DB-->>Service: Created exam record
+    Service-->>Controller: Exam object
+    Controller-->>UI: 201 Created + exam JSON
+    UI-->>Lecturer: Display created exam
+
+    loop Add each question
+        Lecturer->>UI: Enter question and options
+        UI->>API: POST /api/exams/:examId/questions
+        API->>Auth: Verify role and exam ownership
+        Auth-->>API: Authorized request
+        API->>QuestionService: createQuestion(payload)
+        QuestionService->>DB: BEGIN transaction
+        QuestionService->>DB: INSERT question
+        QuestionService->>DB: INSERT question options
+        QuestionService->>DB: COMMIT transaction
+        DB-->>QuestionService: Saved question
+        QuestionService-->>UI: Question JSON
+    end
+
+    Lecturer->>UI: Select Publish Exam
+    UI->>API: PATCH /api/exams/:id/publish
+    API->>Auth: Verify role and ownership
+    API->>Service: publishExam(examId)
+    Service->>DB: UPDATE status to PUBLISHED
+    DB-->>Service: Published exam
+    Service-->>UI: Success response
+    UI-->>Lecturer: Display published status

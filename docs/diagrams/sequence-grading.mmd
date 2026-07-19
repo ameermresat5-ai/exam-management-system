@@ -1,0 +1,65 @@
+%% Lecturer Grades and Publishes Results
+sequenceDiagram
+    autonumber
+
+    actor Lecturer
+    actor Student
+    participant LecturerUI as Lecturer React UI
+    participant StudentUI as Student React UI
+    participant API as Express API
+    participant Auth as Lecturer Authorization
+    participant Service as Grading Service
+    participant ExamService as Exam Service
+    participant DB as PostgreSQL
+
+    Lecturer->>LecturerUI: Open exam submissions
+    LecturerUI->>API: GET /api/exams/:examId/submissions + JWT
+    API->>Auth: Verify JWT, role, and exam ownership
+    Auth-->>API: Authorized request
+    API->>Service: getExamSubmissions(examId)
+    Service->>DB: SELECT submitted attempts
+    DB-->>Service: Submission list
+    Service-->>LecturerUI: Submissions JSON
+    LecturerUI-->>Lecturer: Display submissions
+
+    Lecturer->>LecturerUI: Open one submission
+    LecturerUI->>API: GET /api/submissions/:id
+    API->>Auth: Verify grading permission
+    API->>Service: getSubmissionForGrading(id)
+    Service->>DB: SELECT submission, answers, and questions
+    DB-->>Service: Grading data
+    Service-->>LecturerUI: Submission details
+
+    loop Grade each manual answer
+        Lecturer->>LecturerUI: Enter score and feedback
+        LecturerUI->>API: PATCH /api/answers/:answerId/grade
+        API->>Auth: Verify grading permission
+        API->>Service: gradeAnswer(answerId, score, feedback)
+        Service->>DB: UPDATE answer score and feedback
+        DB-->>Service: Updated answer
+        Service-->>LecturerUI: Grade saved
+    end
+
+    Lecturer->>LecturerUI: Grade complete submission
+    LecturerUI->>API: PATCH /api/submissions/:id/grade
+    API->>Service: gradeSubmission(totalScore, feedback)
+    Service->>DB: UPDATE submission status to GRADED
+    Service->>DB: Save total score and feedback
+    DB-->>Service: Graded submission
+    Service-->>LecturerUI: Submission grade saved
+
+    Lecturer->>LecturerUI: Publish exam results
+    LecturerUI->>API: PATCH /api/exams/:id/publish-results
+    API->>Auth: Verify exam ownership
+    API->>ExamService: publishResults(examId)
+    ExamService->>DB: UPDATE exam status to RESULTS_PUBLISHED
+    DB-->>ExamService: Updated exam
+    ExamService-->>LecturerUI: Results published
+
+    Student->>StudentUI: Open result page
+    StudentUI->>API: GET /api/submissions/:id/result + JWT
+    API->>DB: Verify student ownership
+    API->>DB: Verify results are published
+    DB-->>API: Score, answers, and feedback
+    API-->>StudentUI: Published result JSON
+    StudentUI-->>Student: Display grade and feedback

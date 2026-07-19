@@ -1,0 +1,108 @@
+%% Server Architecture Diagram
+flowchart TB
+    CLIENT["React Frontend"]
+    REQUEST["HTTP Request"]
+    RESPONSE["JSON Response"]
+
+    subgraph EXPRESS_APP["Node.js and Express Application"]
+        APP["app.js"]
+
+        subgraph GLOBAL_MIDDLEWARE["Global Middleware"]
+            HELMET["Helmet"]
+            CORS["CORS"]
+            MORGAN["Morgan Logging"]
+            JSON_PARSER["JSON Parser"]
+            RATE_LIMIT["Rate Limiter"]
+            METRICS["Metrics Middleware"]
+        end
+
+        ROUTES["API Routes"]
+
+        subgraph ACCESS_CONTROL["Access Control"]
+            AUTH["JWT Authentication"]
+            ROLE["Role Authorization"]
+        end
+
+        subgraph CONTROLLER_LAYER["Controller Layer"]
+            AUTH_CONTROLLER["Auth Controller"]
+            EXAM_CONTROLLER["Exam Controller"]
+            QUESTION_CONTROLLER["Question Controller"]
+            STUDENT_CONTROLLER["Student Exam Controller"]
+            GRADING_CONTROLLER["Grading Controller"]
+        end
+
+        subgraph VALIDATION_LAYER["Validation Layer"]
+            AUTH_VALIDATOR["Auth Validators"]
+            EXAM_VALIDATOR["Exam Validators"]
+            QUESTION_VALIDATOR["Question Validators"]
+            STUDENT_VALIDATOR["Student Validators"]
+            GRADING_VALIDATOR["Grading Validators"]
+        end
+
+        subgraph SERVICE_LAYER["Service Layer"]
+            AUTH_SERVICE["Auth Service"]
+            EXAM_SERVICE["Exam Service"]
+            QUESTION_SERVICE["Question Service"]
+            STUDENT_SERVICE["Student Exam Service"]
+            GRADING_SERVICE["Grading Service"]
+        end
+
+        ERRORS["Not Found and Error Handler"]
+    end
+
+    DB_POOL["PostgreSQL Connection Pool"]
+    POSTGRES[("PostgreSQL Database")]
+
+    CLIENT --> REQUEST
+    REQUEST --> APP
+    APP --> HELMET
+    HELMET --> CORS
+    CORS --> MORGAN
+    MORGAN --> JSON_PARSER
+    JSON_PARSER --> RATE_LIMIT
+    RATE_LIMIT --> METRICS
+    METRICS --> ROUTES
+
+    ROUTES --> AUTH
+    AUTH --> ROLE
+
+    ROLE --> AUTH_CONTROLLER
+    ROLE --> EXAM_CONTROLLER
+    ROLE --> QUESTION_CONTROLLER
+    ROLE --> STUDENT_CONTROLLER
+    ROLE --> GRADING_CONTROLLER
+
+    AUTH_CONTROLLER --> AUTH_VALIDATOR
+    EXAM_CONTROLLER --> EXAM_VALIDATOR
+    QUESTION_CONTROLLER --> QUESTION_VALIDATOR
+    STUDENT_CONTROLLER --> STUDENT_VALIDATOR
+    GRADING_CONTROLLER --> GRADING_VALIDATOR
+
+    AUTH_CONTROLLER --> AUTH_SERVICE
+    EXAM_CONTROLLER --> EXAM_SERVICE
+    QUESTION_CONTROLLER --> QUESTION_SERVICE
+    STUDENT_CONTROLLER --> STUDENT_SERVICE
+    GRADING_CONTROLLER --> GRADING_SERVICE
+
+    AUTH_SERVICE --> DB_POOL
+    EXAM_SERVICE --> DB_POOL
+    QUESTION_SERVICE --> DB_POOL
+    STUDENT_SERVICE --> DB_POOL
+    GRADING_SERVICE --> DB_POOL
+
+    DB_POOL --> POSTGRES
+
+    AUTH_CONTROLLER --> RESPONSE
+    EXAM_CONTROLLER --> RESPONSE
+    QUESTION_CONTROLLER --> RESPONSE
+    STUDENT_CONTROLLER --> RESPONSE
+    GRADING_CONTROLLER --> RESPONSE
+
+    APP --> ERRORS
+    AUTH_CONTROLLER -. Error .-> ERRORS
+    EXAM_CONTROLLER -. Error .-> ERRORS
+    QUESTION_CONTROLLER -. Error .-> ERRORS
+    STUDENT_CONTROLLER -. Error .-> ERRORS
+    GRADING_CONTROLLER -. Error .-> ERRORS
+
+    RESPONSE --> CLIENT

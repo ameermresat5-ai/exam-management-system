@@ -1,0 +1,124 @@
+%% Database Entity Relationship Diagram
+erDiagram
+    USERS ||--o{ EXAMS : creates
+    USERS ||--o{ EXAM_SESSIONS : starts
+    USERS ||--o{ SUBMISSIONS : submits
+    USERS ||--o{ SUBMISSIONS : grades
+    USERS ||--o{ NOTIFICATIONS : receives
+    USERS ||--o{ AUDIT_LOGS : performs
+
+    EXAMS ||--o{ QUESTIONS : contains
+    EXAMS ||--o{ EXAM_SESSIONS : has
+    EXAMS ||--o{ SUBMISSIONS : receives
+
+    QUESTIONS ||--o{ QUESTION_OPTIONS : contains
+    QUESTIONS ||--o{ ANSWERS : answered_by
+
+    EXAM_SESSIONS o|--o| SUBMISSIONS : linked_to
+    SUBMISSIONS ||--o{ ANSWERS : contains
+    QUESTION_OPTIONS o|--o{ ANSWERS : selected_in
+
+    USERS {
+        uuid id PK
+        string full_name
+        string email UK
+        string password_hash
+        string role
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    EXAMS {
+        uuid id PK
+        uuid lecturer_id FK
+        string title
+        string description
+        string status
+        int duration_minutes
+        datetime starts_at
+        datetime ends_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    QUESTIONS {
+        uuid id PK
+        uuid exam_id FK
+        string question_text
+        string type
+        decimal points
+        int position
+        string correct_answer
+        datetime created_at
+        datetime updated_at
+    }
+
+    QUESTION_OPTIONS {
+        uuid id PK
+        uuid question_id FK
+        string option_text
+        boolean is_correct
+        int position
+        datetime created_at
+    }
+
+    EXAM_SESSIONS {
+        uuid id PK
+        uuid exam_id FK
+        uuid student_id FK
+        datetime started_at
+        datetime expires_at
+        datetime ended_at
+        string ip_address
+        string user_agent
+    }
+
+    SUBMISSIONS {
+        uuid id PK
+        uuid exam_id FK
+        uuid student_id FK
+        uuid session_id FK
+        string status
+        datetime submitted_at
+        datetime graded_at
+        uuid graded_by FK
+        decimal total_score
+        string feedback
+        datetime created_at
+        datetime updated_at
+    }
+
+    ANSWERS {
+        uuid id PK
+        uuid submission_id FK
+        uuid question_id FK
+        uuid selected_option_id FK
+        string answer_text
+        decimal score
+        string feedback
+        datetime created_at
+        datetime updated_at
+    }
+
+    NOTIFICATIONS {
+        uuid id PK
+        uuid user_id FK
+        string title
+        string message
+        boolean is_read
+        datetime read_at
+        datetime created_at
+    }
+
+    AUDIT_LOGS {
+        uuid id PK
+        uuid user_id FK
+        string action
+        string entity_type
+        uuid entity_id
+        string ip_address
+        string user_agent
+        json metadata
+        datetime created_at
+    }

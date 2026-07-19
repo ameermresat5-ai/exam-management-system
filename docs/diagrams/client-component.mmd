@@ -1,0 +1,104 @@
+%% Client Component Diagram
+flowchart TB
+    USER["Authenticated User"]
+
+    subgraph ENTRY["Application Entry"]
+        MAIN["main.jsx"]
+        BROWSER_ROUTER["BrowserRouter"]
+        AUTH_PROVIDER["AuthProvider"]
+        APP["App.jsx"]
+    end
+
+    subgraph SHARED["Shared Components"]
+        LAYOUT["Layout"]
+        NAVBAR["Navbar"]
+        PROTECTED_ROUTE["ProtectedRoute"]
+    end
+
+    subgraph AUTHENTICATION["Authentication and API"]
+        AUTH_CONTEXT["AuthContext"]
+        API_CLIENT["Axios API Client"]
+        LOCAL_STORAGE[("Browser localStorage")]
+    end
+
+    subgraph PUBLIC["Public Pages"]
+        LOGIN["Login"]
+        REGISTER["Register"]
+        UNAUTHORIZED["Unauthorized"]
+    end
+
+    subgraph STUDENT["Student Pages"]
+        STUDENT_DASHBOARD["StudentDashboard"]
+        STUDENT_EXAMS["StudentExams"]
+        TAKE_EXAM["StudentTakeExam"]
+        STUDENT_SUBMISSIONS["StudentSubmissions"]
+        STUDENT_RESULT["StudentResult"]
+    end
+
+    subgraph LECTURER["Lecturer Pages"]
+        LECTURER_DASHBOARD["LecturerDashboard"]
+        LECTURER_EXAMS["LecturerExams"]
+        CREATE_EXAM["CreateExam"]
+        EXAM_QUESTIONS["ExamQuestions"]
+        EXAM_SUBMISSIONS["ExamSubmissions"]
+        GRADE_SUBMISSION["GradeSubmission"]
+    end
+
+    subgraph ADMIN["Administrator Pages"]
+        ADMIN_DASHBOARD["AdminDashboard"]
+    end
+
+    BACKEND["Express Backend API"]
+
+    USER --> MAIN
+    MAIN --> BROWSER_ROUTER
+    BROWSER_ROUTER --> AUTH_PROVIDER
+    AUTH_PROVIDER --> APP
+    AUTH_PROVIDER --> AUTH_CONTEXT
+
+    APP --> LOGIN
+    APP --> REGISTER
+    APP --> UNAUTHORIZED
+    APP --> LAYOUT
+
+    LAYOUT --> NAVBAR
+    LAYOUT --> PROTECTED_ROUTE
+
+    PROTECTED_ROUTE -->|"STUDENT"| STUDENT_DASHBOARD
+    PROTECTED_ROUTE -->|"LECTURER"| LECTURER_DASHBOARD
+    PROTECTED_ROUTE -->|"ADMIN"| ADMIN_DASHBOARD
+
+    STUDENT_DASHBOARD --> STUDENT_EXAMS
+    STUDENT_EXAMS --> TAKE_EXAM
+    STUDENT_DASHBOARD --> STUDENT_SUBMISSIONS
+    STUDENT_SUBMISSIONS --> STUDENT_RESULT
+
+    LECTURER_DASHBOARD --> LECTURER_EXAMS
+    LECTURER_EXAMS --> CREATE_EXAM
+    LECTURER_EXAMS --> EXAM_QUESTIONS
+    LECTURER_EXAMS --> EXAM_SUBMISSIONS
+    EXAM_SUBMISSIONS --> GRADE_SUBMISSION
+
+    LOGIN --> AUTH_CONTEXT
+    REGISTER --> AUTH_CONTEXT
+    NAVBAR --> AUTH_CONTEXT
+    PROTECTED_ROUTE --> AUTH_CONTEXT
+
+    AUTH_CONTEXT <--> LOCAL_STORAGE
+    AUTH_CONTEXT --> API_CLIENT
+
+    STUDENT_DASHBOARD --> API_CLIENT
+    STUDENT_EXAMS --> API_CLIENT
+    TAKE_EXAM --> API_CLIENT
+    STUDENT_SUBMISSIONS --> API_CLIENT
+    STUDENT_RESULT --> API_CLIENT
+
+    LECTURER_DASHBOARD --> API_CLIENT
+    LECTURER_EXAMS --> API_CLIENT
+    CREATE_EXAM --> API_CLIENT
+    EXAM_QUESTIONS --> API_CLIENT
+    EXAM_SUBMISSIONS --> API_CLIENT
+    GRADE_SUBMISSION --> API_CLIENT
+
+    ADMIN_DASHBOARD --> API_CLIENT
+    API_CLIENT -->|"HTTP + JSON + JWT"| BACKEND

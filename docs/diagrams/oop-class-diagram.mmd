@@ -1,0 +1,131 @@
+%% OOP Domain Class Diagram
+classDiagram
+    direction LR
+
+    class User {
+        +UUID id
+        +String fullName
+        +String email
+        +String passwordHash
+        +UserRole role
+        +Boolean isActive
+        +login()
+        +logout()
+    }
+
+    class Student {
+        +viewAvailableExams()
+        +startExam()
+        +saveAnswers()
+        +submitExam()
+        +viewResult()
+    }
+
+    class Lecturer {
+        +createExam()
+        +updateExam()
+        +manageQuestions()
+        +publishExam()
+        +gradeSubmission()
+        +publishResults()
+    }
+
+    class Administrator {
+        +accessAdminDashboard()
+        +managePlatform()
+    }
+
+    class Exam {
+        +UUID id
+        +String title
+        +String description
+        +ExamStatus status
+        +Integer durationMinutes
+        +DateTime startsAt
+        +DateTime endsAt
+        +publish()
+        +close()
+        +publishResults()
+    }
+
+    class Question {
+        +UUID id
+        +String questionText
+        +QuestionType type
+        +Decimal points
+        +Integer position
+        +String correctAnswer
+    }
+
+    class QuestionOption {
+        +UUID id
+        +String optionText
+        +Boolean isCorrect
+        +Integer position
+    }
+
+    class ExamSession {
+        +UUID id
+        +DateTime startedAt
+        +DateTime expiresAt
+        +DateTime endedAt
+        +start()
+        +finish()
+    }
+
+    class Submission {
+        +UUID id
+        +SubmissionStatus status
+        +Decimal totalScore
+        +String feedback
+        +submit()
+        +grade()
+    }
+
+    class Answer {
+        +UUID id
+        +String answerText
+        +Decimal score
+        +String feedback
+        +save()
+        +grade()
+    }
+
+    class Notification {
+        +UUID id
+        +String title
+        +String message
+        +Boolean isRead
+        +markAsRead()
+    }
+
+    class AuditLog {
+        +UUID id
+        +String action
+        +String entityType
+        +JSON metadata
+        +record()
+    }
+
+    User <|-- Student
+    User <|-- Lecturer
+    User <|-- Administrator
+
+    Lecturer "1" --> "0..*" Exam : creates
+    Exam "1" *-- "1..*" Question : contains
+    Question "1" *-- "0..*" QuestionOption : contains
+
+    Student "1" --> "0..*" ExamSession : starts
+    Exam "1" --> "0..*" ExamSession : has
+
+    Student "1" --> "0..*" Submission : creates
+    Exam "1" --> "0..*" Submission : receives
+    ExamSession "0..1" --> "0..1" Submission : linkedTo
+
+    Submission "1" *-- "1..*" Answer : contains
+    Answer "0..*" --> "1" Question : answers
+    Answer "0..*" --> "0..1" QuestionOption : selects
+
+    Lecturer "1" --> "0..*" Submission : grades
+    User "1" --> "0..*" Notification : receives
+    User "0..1" --> "0..*" AuditLog : generates
