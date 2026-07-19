@@ -1,0 +1,12 @@
+# Copy this file to terraform.tfvars only on your local machine.
+# Never commit terraform.tfvars when it contains real values.
+
+project_id = "replace-with-your-google-cloud-project-id"
+region     = "me-west1"
+
+environment      = "production"
+application_name = "exam-management-system"
+
+gke_cluster_name        = "exam-management-gke"
+artifact_registry_name  = "exam-management-images"
+cloud_sql_instance_name = "exam-management-postgres"
