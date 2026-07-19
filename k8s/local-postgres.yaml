@@ -27,7 +27,10 @@ spec:
             - name: POSTGRES_USER
               value: exam_user
             - name: POSTGRES_PASSWORD
-              value: exam_password
+              valueFrom:
+                secretKeyRef:
+                  name: exam-postgres-secret
+                  key: POSTGRES_PASSWORD
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

@@ -29,3 +29,5 @@ logs/
 *.log
 k8s/backend-secret.yaml
 k8s/backend-secret.local.yaml
+k8s/local-postgres.before-secret-ref.yaml
+k8s/postgres-secret.yaml
