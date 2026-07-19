@@ -2,6 +2,22 @@
 
 A full-stack online exam management system for creating, managing, taking, grading, and publishing exam results. The project is designed as a student DevSecOps full-stack project with a complete application stack, containerization, Kubernetes manifests, monitoring, Infrastructure as Code templates, and CI/CD workflows.
 
+## Project Team
+
+- Ameer Mresat
+- Mohamed Kharanba
+
+## Project Links
+
+| Resource | URL / Status |
+| --- | --- |
+| GitHub repository | https://github.com/ameermresat5-ai/exam-management-system |
+| Frontend deployment | Pending completion and verification of the Google Cloud deployment |
+| Backend API deployment | Pending completion and verification of the Google Cloud deployment |
+| Detailed project documentation | [`docs/README.md`](docs/README.md) |
+
+> The final public frontend and backend URLs will be added after the Google Cloud deployment is completed and tested.
+
 ## 1. Project Overview
 
 The Full Stack Exam Management System supports three user roles:
@@ -12,7 +28,7 @@ The Full Stack Exam Management System supports three user roles:
 
 Lecturers can create and manage exams, add questions, publish exams, review submissions, grade answers, and publish results. Students can register, log in, view available exams, start exams, submit answers, and view grades with feedback. Admin users are included for platform-level access and future administration features.
 
-The application includes a React frontend, Node.js Express backend, PostgreSQL database schema, JWT authentication, role-based authorization, Dockerfiles, Kubernetes manifests for Minikube, Prometheus and Grafana monitoring, Terraform AWS EKS templates, and GitHub Actions workflows.
+The application includes a React frontend, Node.js Express backend, PostgreSQL database schema, JWT authentication, role-based authorization, Dockerfiles, Kubernetes manifests for Minikube, Prometheus and Grafana monitoring, a Google Cloud Terraform foundation for the planned GKE deployment, an AWS EKS Terraform template retained as an infrastructure demonstration, and GitHub Actions workflows.
 
 ## 2. Architecture
 
@@ -41,8 +57,16 @@ Kubernetes Manifests for Minikube
         +-- Local PostgreSQL Deployment and Service
         +-- Prometheus and Grafana Monitoring
 
-Terraform AWS EKS Template
+Google Cloud Terraform Foundation
         |
+        +-- Required Google Cloud APIs
+        +-- Planned Artifact Registry
+        +-- Planned Google Kubernetes Engine deployment
+        +-- Planned managed PostgreSQL database
+
+AWS EKS Terraform Template
+        |
+        +-- Retained as an Infrastructure as Code demonstration
         +-- VPC
         +-- EKS
         +-- RDS PostgreSQL
@@ -108,8 +132,8 @@ Security and DevSecOps features:
 | Metrics | prom-client, Prometheus |
 | Monitoring UI | Grafana |
 | Containers | Dockerfiles for frontend and backend |
-| Kubernetes | Minikube manifests |
-| Infrastructure as Code | Terraform AWS EKS template |
+| Kubernetes | Minikube manifests and planned Google Kubernetes Engine deployment |
+| Infrastructure as Code | Terraform Google Cloud foundation and AWS EKS template |
 | CI/CD | GitHub Actions |
 
 ## 5. Folder Structure
@@ -390,10 +414,3 @@ Recommended screenshots for the final project report:
 - Terraform AWS EKS files are templates only.
 - Do not run `terraform apply` unless you intentionally want paid AWS resources.
 - No Docker Compose setup is used.
-
-## 14. Project Team
-
-- Ameer Mresat
-- Mohamed Kharanba
-
-Created as a Full Stack DevSecOps final project.
