@@ -391,6 +391,9 @@ Recommended screenshots for the final project report:
 - Do not run `terraform apply` unless you intentionally want paid AWS resources.
 - No Docker Compose setup is used.
 
-## 14. Author
+## 14. Project Team
 
-Created as a Full Stack DevSecOps student project.
+- Ameer Mresat
+- Mohamed Kharanba
+
+Created as a Full Stack DevSecOps final project.

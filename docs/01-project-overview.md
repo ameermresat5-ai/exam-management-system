@@ -6,7 +6,7 @@
 | --- | --- |
 | Project name | Full Stack Exam Management System |
 | Project type | Full-stack web application and DevSecOps final project |
-| Author | Ameer Mresat |
+| Project team | Ameer Mresat and Mohamed Kharanba |
 | GitHub repository | https://github.com/ameermresat5-ai/exam-management-system |
 | Production deployment | Pending completion of the Google Cloud deployment |
 | Main documentation | Root `README.md` and the files under `docs/` |
