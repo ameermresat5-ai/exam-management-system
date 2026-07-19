@@ -27,3 +27,5 @@ kubeconfig*
 # Logs
 logs/
 *.log
+k8s/backend-secret.yaml
+k8s/backend-secret.local.yaml
