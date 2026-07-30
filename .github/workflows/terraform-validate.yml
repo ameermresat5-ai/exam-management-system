@@ -21,6 +21,7 @@ jobs:
       matrix:
         terraform_directory:
           - terraform/aws-eks
+          - terraform/gcp-bootstrap
           - terraform/gcp-gke
 
     steps:
