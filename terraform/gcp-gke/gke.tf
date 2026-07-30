@@ -6,6 +6,10 @@ resource "google_container_cluster" "main" {
   enable_autopilot    = true
   deletion_protection = true
 
+  secret_manager_config {
+    enabled = true
+  }
+
   network    = google_compute_network.main.id
   subnetwork = google_compute_subnetwork.main.id
 
